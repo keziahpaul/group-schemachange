@@ -1,0 +1,49 @@
+config-version: 1
+
+root-folder: schemachange
+modules-folder: schemachange/modules
+
+vars:
+  in_sf_env: {{env_var('SF_ENV', 'prd')}}
+  aws_account_number: '725563543552'
+  aws_external_id: JV60414_SFCRole=group_salesforce_s3_integration
+  aws_s3_path: pexa-salesforce-data-egress-prod
+  allowed_s3_path: s3://pexa-salesforce-data-egress-prod/
+  local_current_timestamp: convert_timezone('Australia/Sydney', current_timestamp)
+  aws_secretmgr_role: onedata-group-snowflake-integration-role-prd
+
+  kapiche_aws_external_id: JV60414_SFCRole=group_kapiche_s3_integration
+  kapiche_aws_account_number: '671409750083'
+  kapiche_allowed_s3_path: s3://kapiche-pipelines-cd1ec12b-32ab-4c8e-82bf-34f453d125aa/
+  kapiche_aws_role: Pexa-ExtRole
+  kapiche_allowed_s3_archive_path: s3://onedata-kapiche-archive-725563543552-prd
+  sendfx_allowed_azure_path: azure://storagepexaprod8944675.blob.core.windows.net/pexa/
+  sendfx_azure_tenant_id: 583e9a37-05e1-4bb5-9ed3-76b6babd33f9
+  bespoke_allowed_s3_path: s3://pexa-onedata-egress-725563543552-prd/
+  bespoke_aws_external_id: JV60414_SFCRole=group_bespoke_s3_integration
+  ingress_allowed_s3_path: s3://onedata-ingress-725563543552-prd/
+
+  params_dict:
+    send_alert_slack_email: "'onedata-voc-send-rego-aaaapiuzepismkqrgpvgar57by@pexa.slack.com'"
+    slack_job_notification_email_address: "'onedata-prod-notifica-aaaalrmc5cx4jrh2ml3csxqn4m@pexa.slack.com'"
+
+  fms_allowed_azure_path: azure://d365dataextractor.blob.core.windows.net/dataverse-pexaprod-unq1e017d91a7ceed11aece000d3a791/  
+  fms_azure_tenant_id: 4632f90a-2097-4dd6-b1e6-c44dfee184be
+  fms_azure_primary_storage_queue: https://d365dataextractor.queue.core.windows.net/prod-fms-to-snowflake-storage-queue
+  jira:
+    url: https://pexa.atlassian.net
+    email: svc_jira_snowflake_prd@pexa.com.au
+    network_identifier: pexa.atlassian.net
+
+  genesys:
+    static_url: https://apps.mypurecloud.com.au/platform/api/v2/downloads/1e19a21ef1450b92
+    token_url: https://login.mypurecloud.com.au/oauth/token
+    api_url: https://api.mypurecloud.com.au
+    network_identifiers: "'login.mypurecloud.com.au','apps.mypurecloud.com.au','api-downloads.mypurecloud.com.au','api.mypurecloud.com.au'"
+
+snowflake-account: JV60414.ap-southeast-2
+snowflake-role: PRD_GITHUB_INTEGRATION_ROLE_S
+snowflake-user: PRD_GITHUB_INTEGRATION_USER
+snowflake-warehouse: PRD_ADMIN_XS_WH
+snowflake-database: PRD_METADATA
+

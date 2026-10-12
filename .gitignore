@@ -1,0 +1,10 @@
+*.env
+*.env.*
+keys/
+.terraform/
+.terraform.lock.hcl
+terraform.tfstate*
+.venv/
+.DS_Store
+.ds*
+.vscode/

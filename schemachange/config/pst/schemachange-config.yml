@@ -1,0 +1,38 @@
+config-version: 1
+
+root-folder: schemachange
+modules-folder: schemachange/modules
+
+vars:
+  in_sf_env: {{env_var('SF_ENV', 'pst')}}
+  aws_account_number: '725563543552'
+  sendfx_allowed_azure_path: azure://storagepexaprod8944675.blob.core.windows.net/pexa/
+  sendfx_azure_tenant_id: 583e9a37-05e1-4bb5-9ed3-76b6babd33f9
+  local_current_timestamp: convert_timezone('Australia/Sydney', current_timestamp)
+  aws_secretmgr_role: onedata-group-snowflake-integration-role-pst
+  params_dict:
+    send_alert_slack_email: "'onedata-voc-send-rego-aaaapiuzepismkqrgpvgar57by@pexa.slack.com'"
+    slack_job_notification_email_address: "'aws-preprod-notificat-aaaalrttop66hthnmjqqeeskvm@pexa.slack.com'"
+  ingress_allowed_s3_path: s3://onedata-ingress-725563543552-pst/
+
+  jira:
+    url: https://pexa.atlassian.net
+    email: svc_jira_snowflake_prd@pexa.com.au
+    network_identifier: pexa.atlassian.net
+
+  genesys:
+    static_url: https://apps.mypurecloud.com.au/platform/api/v2/downloads/1e19a21ef1450b92
+    token_url: https://login.mypurecloud.com.au/oauth/token
+    api_url: https://api.mypurecloud.com.au
+    network_identifiers: "'login.mypurecloud.com.au','apps.mypurecloud.com.au','api-downloads.mypurecloud.com.au','api.mypurecloud.com.au'"
+
+snowflake-account: JV60414.ap-southeast-2
+snowflake-role: PST_GITHUB_INTEGRATION_ROLE_S
+snowflake-user: PST_GITHUB_INTEGRATION_USER
+snowflake-warehouse: PST_ADMIN_XS_WH
+snowflake-database: PST_METADATA
+
+
+
+
+

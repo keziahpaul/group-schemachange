@@ -1,0 +1,50 @@
+config-version: 1
+
+root-folder: schemachange
+modules-folder: schemachange/modules
+
+vars:
+  in_sf_env: {{env_var('SF_ENV', 'tst')}}
+  aws_account_number: '042775015153'
+  aws_external_id: DJ58410_SFCRole=group_salesforce_s3_integration
+  aws_s3_path: salesforce-appflow-data-test
+  allowed_s3_path: s3://salesforce-appflow-data-test/
+  local_current_timestamp: convert_timezone('Australia/Sydney', current_timestamp)
+  aws_secretmgr_role: onedata-group-snowflake-integration-role-tst
+
+  kapiche_aws_external_id: DJ58410_SFCRole=group_kapiche_s3_integration
+  kapiche_aws_account_number: '671409750083'
+  kapiche_allowed_s3_path: s3://kapiche-pipelines-non-prod-9f9b8a00-6dfb-4bb7-8f9c-527f02675d23/
+  kapiche_aws_role: Pexa-ExtRole-Non-Prod
+  kapiche_allowed_s3_archive_path: s3://onedata-kapiche-archive-042775015153-tst
+  sendfx_allowed_azure_path: azure://storagepexappt78944624.blob.core.windows.net/pexa/
+  sendfx_azure_tenant_id: 583e9a37-05e1-4bb5-9ed3-76b6babd33f9
+  params_dict:
+    send_alert_slack_email: "'onedata-voc-send-rego-aaaapiuzepismkqrgpvgar57by@pexa.slack.com'"
+    slack_job_notification_email_address: "'aws-test-notification-aaaalqmoceuep6cnk7rstccrl4@pexa.slack.com'"
+  
+  bespoke_allowed_s3_path: s3://pexa-onedata-egress-042775015153-tst/
+  bespoke_aws_external_id: DJ58410_SFCRole=group_bespoke_s3_integration
+
+  fms_allowed_azure_path: azure://d365dataextractortest.blob.core.windows.net/dataverse-pexatest2-unq04c160071fc9ed11a10b002248e34/  
+  fms_azure_tenant_id: 4632f90a-2097-4dd6-b1e6-c44dfee184be
+  fms_azure_primary_storage_queue: https://d365dataextractortest.queue.core.windows.net/snowflake-azure-fms-queue
+  
+  ingress_allowed_s3_path: s3://onedata-ingress-042775015153-tst/
+
+  jira:
+    url: https://pexa.atlassian.net
+    email: svc_jira_snowflake_prd@pexa.com.au
+    network_identifier: pexa.atlassian.net
+
+  genesys:
+    static_url: https://apps.mypurecloud.com.au/platform/api/v2/downloads/1e19a21ef1450b92
+    token_url: https://login.mypurecloud.com.au/oauth/token
+    api_url: https://api.mypurecloud.com.au
+    network_identifiers: "'login.mypurecloud.com.au','apps.mypurecloud.com.au','api-downloads.mypurecloud.com.au','api.mypurecloud.com.au'"
+
+snowflake-account: dj58410.ap-southeast-2
+snowflake-role: TST_GITHUB_INTEGRATION_ROLE_S
+snowflake-user: TST_GITHUB_INTEGRATION_USER
+snowflake-warehouse: TST_ADMIN_XS_WH
+snowflake-database: TST_METADATA

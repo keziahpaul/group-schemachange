@@ -1,0 +1,114 @@
+name: Get Common contents from snowflake common repo
+description: 'clone the common repo and fetch the modules version number based on the branch checked out from '
+inputs:
+
+  ENV_INPUT:
+    description: the environment for deployment of schemachange scripts
+    required: true
+    default: dev
+
+  ACCNAME:
+    description: the environment for deployment of schemachange scripts
+    required: true
+    default: '{"group-dev": "DJ58410"}'
+
+  PROD_AWS_ACCOUNT:
+    description: the AWS Account identifier for Prod one data account. Set as git environment variable
+    required: true
+
+  NONPROD_AWS_ACCOUNT:
+    description: the AWS Account identifier for Non-Prod account where logging files will be stored. Set as git environment variable
+    required: true
+
+  
+
+
+
+runs:
+  using: "composite"
+  steps:
+
+    - name: get Account Name based on Inputs
+      id: getAcctName
+      shell: bash
+      env:
+        ACC_INPUT: group
+        ENV_INPUT: ${{ inputs.ENV_INPUT }}
+        ACCNAME: ${{ inputs.ACCNAME }}
+        PROD_AWS_ACCOUNT: '${{ inputs.PROD_AWS_ACCOUNT }}'        
+        NONPROD_AWS_ACCOUNT: '${{ inputs.NONPROD_AWS_ACCOUNT }}'
+       
+
+
+      run: |
+          ACC_INPUT=${{ env.ACC_INPUT}}
+          ENV_INPUT=${{ env.ENV_INPUT}}
+          echo "The account and environment chosen are  $ACC_INPUT and $ENV_INPUT "
+
+          #################### Pattern to check against teh account, and environment input variables to extract account Name ########################
+          pattern="$ACC_INPUT-$ENV_INPUT"
+
+          accName=$(echo '${{ env.ACCNAME }}' | jq --arg patterns $pattern -r '.[$patterns] // ""')
+
+          echo "accName=$accName" >> $GITHUB_OUTPUT
+          snowflake_acc_region='ap-southeast-2'
+          echo "Snowflake account has been set to AWS region: $snowflake_acc_region"
+
+
+          if [[ -z $accName ]] ; then
+            echo "The Process stopped since Environment not available for the Account, based on environment variable accountName "
+            run_rest_jobs=false
+          else
+            echo "Continue the execution for account Name:  $accName"
+            run_rest_jobs=true
+            deployEnvDev=`echo "dev,tst,uat,perf"| tr "," '\n'|grep -x "$ENV_INPUT"||echo ""`
+            echo "Deployment environment: $deployEnvDev "
+
+            if [[ -z $deployEnvDev ]]  ; then
+              echo 'deploying in prod'
+              deploy_environment='prod'
+              aws_secret_account=${{ env.PROD_AWS_ACCOUNT }}
+              
+            else
+              echo 'deploying in nonprod'
+              deploy_environment='nonprod'
+              aws_secret_account=${{ env.NONPROD_AWS_ACCOUNT }}
+              
+            fi
+            
+
+            echo "run_rest_jobs=$run_rest_jobs" >> $GITHUB_OUTPUT
+            echo "aws_secret_account=$aws_secret_account" >> $GITHUB_OUTPUT            
+            echo "deploy_environment=$deploy_environment" >> $GITHUB_OUTPUT
+            echo "acc_input=$ACC_INPUT" >> $GITHUB_OUTPUT
+            echo "env_input=$ENV_INPUT" >> $GITHUB_OUTPUT
+            echo "image=${{ env.IMAGE }}" >> $GITHUB_OUTPUT            
+            echo "snowflake_acc_region=$snowflake_acc_region" >> $GITHUB_OUTPUT
+          fi
+
+outputs:
+
+  run_rest_jobs:
+    description: "The value says that the deploy jobs need to run "
+    value: ${{ steps.getAcctName.outputs.run_rest_jobs }}
+  accName:
+    description: "Snowflake Account name for which the deploy would run"
+    value: ${{ steps.getAcctName.outputs.accName }}
+  deploy_environment:
+    description: "Snowflake Account environment for which the deploy would run"
+    value: ${{ steps.getAcctName.outputs.deploy_environment }}
+  acc_input:
+    description: "The snowflake Account name"
+    value: ${{ steps.getAcctName.outputs.acc_input }}
+  env_input:
+    description: "The value chosen in drop down Environment"
+    value: ${{ steps.getAcctName.outputs.env_input }}
+  image:
+    description: "Snowlfkae docker image"
+    value: ${{ steps.getAcctName.outputs.image }}
+  aws_secret_account:
+    description: "AWS Account where secrets are stored"
+    value: ${{ steps.getAcctName.outputs.aws_secret_account }}  
+  snowflake_acc_region:
+    description: "Region for Snowflake account depends on weather it is an AWS or Azure based Account"
+    value: ${{ steps.getAcctName.outputs.snowflake_acc_region }}
